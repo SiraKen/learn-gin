@@ -1,0 +1,9 @@
+# built file
+/build/*
+
+# environment
+.env
+.env.local
+
+# misc
+.DS_Store

@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -Ceux
+
+ARGS=${@:2}
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CURRENT_DIR_NAME=${PWD##*/}
+
+case $1 in
+  "up")
+    docker compose up -d
+  ;;
+  "down")
+    docker compose down
+  ;;
+  "restart")
+    docker compose down
+    docker compose up
+  ;;
+  "exec")
+    docker compose exec goapp $ARGS
+  ;;
+  "build")
+    go build -o build/
+  ;;
+  "run")
+    cp ./.env ./build/ && cd build && ./example
+  ;;
+  * ) echo Unexpected argument: $1
+  ;;
+esac

@@ -9,3 +9,18 @@ services:
       - ./app:/go/src/app
     ports:
       - "8080:8080"
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+    volumes:
+      - gin-mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    depends_on:
+      - goapp
+    restart: always
+    platform: linux/amd64
+volumes:
+  gin-mysql:
+    driver: local

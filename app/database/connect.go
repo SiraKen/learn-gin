@@ -12,6 +12,8 @@ import (
 
 func Connect() *sql.DB {
 
+	fmt.Println("Connecting to database...")
+
 	err := godotenv.Load()
 	if (err != nil) {
 		fmt.Println(err.Error())

@@ -21,7 +21,7 @@ func main() {
 	err := db.Ping()
 
 	if (err != nil) {
-		fmt.Println("DB Connection Unsuccessful")
+		fmt.Println("DB Connection Unsuccessful ->", err.Error())
 		return
 	} else {
 		fmt.Println("DB Connection Successful")

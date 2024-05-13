@@ -1,4 +1,4 @@
-module example
+module lgin
 
 go 1.17
 

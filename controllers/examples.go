@@ -1,42 +1,32 @@
 package controllers
 
 import (
-	"fmt"
+	"errors"
 	"lgin/database"
 	m "lgin/models"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func GetExample(c *gin.Context) {
 
 	db := database.Connect()
 
-	defer db.Close()
-
-	err := db.Ping()
-
-	if err != nil {
-		fmt.Println("DB Connection Unsuccessful ->", err.Error())
-		return
-	} else {
-		fmt.Println("DB Connection Successful")
-	}
-
-	rows, err := db.Query("SELECT * FROM example WHERE id = ?", c.Param("id"))
-	if err != nil {
-		panic(err.Error())
-	}
-
-	exampleArgs := make([]m.Example, 0)
-	for rows.Next() {
-		var example m.Example
-		err = rows.Scan(&example.ID, &example.Title)
-		if err != nil {
-			panic(err.Error())
+	res := db.Exec("SELECT * FROM examples WHERE id = ?", c.Param("id"))
+	if res.Error != nil {
+		if errors.Is(res.Error, gorm.ErrRecordNotFound) {
+			c.JSON(404, gin.H{
+				"message": "Record not found",
+			})
+			return
+		} else {
+			panic(res.Error)
 		}
-		exampleArgs = append(exampleArgs, example)
 	}
+
+	var exampleArgs m.Example
+	res.Scan(&exampleArgs)
 
 	c.JSON(200, exampleArgs)
 }
